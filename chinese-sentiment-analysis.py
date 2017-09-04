@@ -62,6 +62,13 @@ def get_train_vecs(x_train, x_test):
     n_dim = 300
     # 初始化模型和词表
     imdb_w2v = Word2Vec(x_train, size=n_dim, min_count=10)
+    # imdb_w2v = Word2Vec(size=300, window=5, min_count=10, workers=12)
+    # imdb_w2v.build_vocab(x_train)
+    #
+    # imdb_w2v.train(x_train,
+    #                total_examples=imdb_w2v.corpus_count,
+    #                epochs=imdb_w2v.iter)
+
 
     train_vecs = np.concatenate([build_sentence_vector(z, n_dim, imdb_w2v) for z in x_train])
     # train_vecs = scale(train_vecs)
@@ -70,6 +77,10 @@ def get_train_vecs(x_train, x_test):
     print train_vecs.shape
     # 在测试集上训练
     imdb_w2v.train(x_test)
+    # imdb_w2v.train(x_test,
+    #                total_examples=imdb_w2v.corpus_count,
+    #                epochs=imdb_w2v.iter)
+
     imdb_w2v.save('svm_data/w2v_model/w2v_model.pkl')
     # Build test tweet vectors then scale
     test_vecs = np.concatenate([build_sentence_vector(z, n_dim, imdb_w2v) for z in x_test])
@@ -123,9 +134,9 @@ def svm_predict(string):
 #x_train,x_test = load_file_and_preprocessing()
 #get_train_vecs(x_train,x_test)
 #train_vecs,y_train,test_vecs,y_test = get_data()
-#svm_train(train_vecs,y_train,test_vecs,y_test)
+svm_train(train_vecs,y_train,test_vecs,y_test)
 
 ##对输入句子情感进行判断
 #string='电池充完了电连手机都打不开.简直烂的要命.真是金玉其外,败絮其中!连5号电池都不如'
-string='这手机真棒，从1米高的地方摔下去就坏了'
-svm_predict(string)
+#string='这手机真棒，从1米高的地方摔下去就坏了'
+#svm_predict(string)
